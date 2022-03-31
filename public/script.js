@@ -1,7 +1,6 @@
-const socket = io('/')
+const socket = io('https://1c72-2402-800-620e-c978-a5af-b27a-bdf4-cc17.ngrok.io')
 const videoGrid = document.getElementById('video-grid')
 const myPeer = new Peer(undefined, {
-  host: '/',
   port: '3001'
 })
 

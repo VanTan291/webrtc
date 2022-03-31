@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="jquery.js"></script>
+    <script src="/socket.io/socket.io.js" ></script>
+    <title>Document</title>
+    <script>
+        var socket = io('https://1c72-2402-800-620e-c978-a5af-b27a-bdf4-cc17.ngrok.io');
+
+        socket.on('server-send-data', function(data) {
+            $('#noidung').append(data + ',');
+        });
+
+        $(document).ready(() => {
+            $('#mrA').click(function() {
+                socket.emit('client-send-data', 'hello tan');
+            })
+        });
+    </script>
+</head>
+<body>
+    <div id="mrA" >click</div>
+    <h4 id="noidung" ></h4>
+</body>
+</html>
