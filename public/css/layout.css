@@ -1,0 +1,19 @@
+.left {
+    float: left;
+    width: 30%;
+    background-color: wheat;
+    height: 200px;
+    overflow: scroll;
+}
+
+.right {
+    float: right;
+    width: 70%;
+    background-color:red;
+}
+
+#listMessage {
+    height: 200px;
+    background-color: aqua;
+    overflow: scroll;
+}

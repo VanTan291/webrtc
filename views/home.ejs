@@ -4,25 +4,40 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="jquery.js"></script>
-    <script src="/socket.io/socket.io.js" ></script>
-    <title>Document</title>
-    <script>
-        var socket = io('/');
-
-        socket.on('server-send-data', function(data) {
-            $('#noidung').append(data + ',');
-        });
-
-        $(document).ready(() => {
-            $('#mrA').click(function() {
-                socket.emit('client-send-data', 'hello tan');
-            })
-        });
-    </script>
+    <title>Chat real time</title>
+    <link rel="stylesheet" type="text/css" href="/css/layout.css">
 </head>
 <body>
-    <div id="mrA" >click</div>
-    <h4 id="noidung" ></h4>
+    <div class="">
+        <div class="login" id="loginFrom">
+            <h1>Tên: </h1>
+            <p style="color: red;" id="error"></p>
+            <input type="text" value="" id="text-user">
+            <input type="button" id="btnRegister" value="register"/>
+        </div>
+
+        <div class="chat" id="chatFrom">
+            <div class="left">
+                <div class="user-online">
+                    Thành viên tham gia chat
+                </div>
+                <div id="box-content">
+
+                </div>
+            </div>
+            <div class="right">
+                Xin chào:  <span id="currentUser">Teo</span>
+                <input type="button" id="btnLogout" value="Đăng Xuất"/>
+                <div id="listMessage">
+                    <div style="background-color: brown;" id="startMessage"></div>
+                </div>
+                <input type="text" id="message" value="" placeholder="nhap tin nhan"/>
+                <input type="button" value="Gửi" id="sendMessage"/>
+            </div>
+        </div>
+    </div>
 </body>
+    <script src="/js/jquery.js"></script>
+    <script src="/socket.io/socket.io.js" ></script>
+    <script src="handle.js" ></script>
 </html>
