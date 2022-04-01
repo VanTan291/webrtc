@@ -8,7 +8,7 @@
     <script src="/socket.io/socket.io.js" ></script>
     <title>Document</title>
     <script>
-        var socket = io('https://1c72-2402-800-620e-c978-a5af-b27a-bdf4-cc17.ngrok.io');
+        var socket = io('/');
 
         socket.on('server-send-data', function(data) {
             $('#noidung').append(data + ',');
