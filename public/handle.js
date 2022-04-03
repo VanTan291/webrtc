@@ -29,6 +29,21 @@ socket.on('stop-message', function() {
     $('#startMessage').html('');
 });
 
+socket.on('server-send-rooms', function(data) {
+    $('#all-room').html('');
+    data.map(function(r) {
+        $('#all-room').append('<h4 class="room">' + r + '</h4>');
+    });
+});
+
+socket.on('server-send-room-socket', function(data) {
+    $('#room-current').html(data);
+});
+
+socket.on('server-chat', function(data) {
+    $('#listMessageRoom').append('<p style="color:black">' + data + '</p>')
+});
+
 $(document).ready(function() {
     $('#loginFrom').show();
     $('#chatFrom').hide();
@@ -61,5 +76,13 @@ $(document).ready(function() {
 
     $('#message').focusout(function() {
         socket.emit('stop-message');
+    });
+
+    $('#btnRoom').click(function() {
+        socket.emit('create-room', $('#text-room').val());
     })
+
+    $('#sendMessageRoom').click(function() {
+        socket.emit('send-message-room', $('#messageRoom').val());
+    });
 })

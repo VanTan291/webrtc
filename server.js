@@ -37,6 +37,7 @@ app.get('/', (req, res) => {
 var arrayUsers = [];
 io.on('connection', socket => {
   console.log('co nguoi ket noi nhe: ', socket.id);
+  //console.log(socket.adapter.rooms); //liet ke cac room co tren server ra socket.adapter.rooms
 
   socket.on("client-register", (data) => {
     if (arrayUsers.indexOf(data) >= 0) {
@@ -48,6 +49,7 @@ io.on('connection', socket => {
 
       socket.emit('server-send-register-success', data);
 
+      //send data to all user
       io.sockets.emit('server-send-list-data', arrayUsers);
     }
 
@@ -85,6 +87,22 @@ io.on('connection', socket => {
     socket.broadcast.emit('server-send-list-data', arrayUsers);
   });
 
+  socket.on('create-room', (data) => {
+    socket.join(data);
+    socket.phong = data;
+
+    var arrayRooms = [];
+    for (const [ key, value ] of socket.adapter.rooms) {
+      arrayRooms.push(key);
+    }
+
+    io.sockets.emit('server-send-rooms', arrayRooms);
+    socket.emit('server-send-room-socket', data);
+  });
+
+  socket.on('send-message-room', (data) => {
+    io.sockets.in(socket.phong).emit('server-chat', data);
+  })
   //io.to chat cho tung người
   // io.to('socketId').emit();
 
