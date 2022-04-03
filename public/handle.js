@@ -1,4 +1,4 @@
-var socket = io('/');
+var socket = io('https://lamvantan-nodejs.herokuapp.com');
 
 socket.on('server-send-register-error', function(data) {
     $('#error').html(data)
