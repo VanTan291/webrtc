@@ -11,18 +11,64 @@ socket.on('server-send-register-success', function(data) {
 });
 
 socket.on('server-send-list-data', function(data) {
-    $('#box-content').html('');
+    console.log(data);
+    $('#chats').html('');
     data.forEach(function(i) {
-        $('#box-content').append('<div class="user">' + i + '</div>')
-    })
+        $('#chats').append('<a class="filterDiscussions all unread single" id="list-chat-list5" data-toggle="list" role="tab">'
+            +'<div class="status">'
+            +'<i class="material-icons online">fiber_manual_record</i>'
+            +'</div>'
+            +'<div class="data p-2 ml-2">'
+            +'<h5>' + i + '</h5>'
+            +'<p>Đã tham gia</p>'
+            +'</div>')
+    });
 })
 
 socket.on('server-send-message', function(data) {
-    $('#listMessage').append('<p style="color:black">' + data.name + ': ' + data.message + '</p>')
+    var name = $('#currentUser').text();
+
+    $('#listMessage').append(
+    (name != data.name 
+    ? 
+    '<div class="message">'
+        +'<b class="mb-4 mr-1 text-black">' + data.name + ': </b>'
+        +'<div class="text-main">'
+            +'<div class="text-group">'
+                +'<div class="text">'
+                    +'<p>' + data.message + '</p>'
+                +'</div>'
+            +'</div>'
+        +'</div>'
+    +'</div>' 
+    : 
+    '<div class="message me">'
+        +'<div class="text-main">'
+            +'<div class="text-group me">'
+                +'<div class="text me">'
+                    +'<p>' + data.message + '</p>'
+                +'</div>'
+            +'</div>'
+        +'</div>'
+    +'</div>')
+   );
 })
 
 socket.on('start-message', function(data) {
-    $('#startMessage').html('<img src="/image/send.gif" width="30" />' + data);
+    $('#startMessage').html('<div class="message">'
+    +'<b class="mb-4 mr-1 text-black">' + data + ': </b>'
+    +'<div class="text-main">'
+        +'<div class="text-group">'
+            +'<div class="text typing">'
+                +'<div class="wave">'
+                    +'<span class="dot"></span>'
+                    +'<span class="dot"></span>'
+                    +'<span class="dot"></span>'
+                +'</div>'
+            +'</div>'
+        +'</div>'
+    +'</div>'
+    +'</div>');
 });
 
 socket.on('stop-message', function() {
@@ -49,9 +95,9 @@ $(document).ready(function() {
     $('#chatFrom').hide();
 
     $('#btnRegister').click(function() {
-        if ($('#text-user').val() != '') {
-            socket.emit('client-register', $('#text-user').val());
-            $('#text-user').val('');
+        if ($('#input-name').val() != '') {
+            socket.emit('client-register', $('#input-name').val());
+            $('#input-name').val('');
         } else {
             $('#error').html('Vui lòng đặt nickname bạn ơi: ')
         }
@@ -64,17 +110,17 @@ $(document).ready(function() {
     });
 
     $('#sendMessage').click(function() {
-        if ($('#message').val() != '') {
-            socket.emit('user-send-message', $('#message').val());
-            $('#message').val('');
+        if ($('#text-message').val() != '') {
+            socket.emit('user-send-message', $('#text-message').val());
+            $('#text-message').val('');
         }
     });
 
-    $('#message').focusin(function() {
+    $('#text-message').focusin(function() {
         socket.emit('start-message');
     })
 
-    $('#message').focusout(function() {
+    $('#text-message').focusout(function() {
         socket.emit('stop-message');
     });
 
@@ -85,4 +131,15 @@ $(document).ready(function() {
     $('#sendMessageRoom').click(function() {
         socket.emit('send-message-room', $('#messageRoom').val());
     });
-})
+
+    $(document).keyup(function (e) {
+        if ($("#text-message").is(":focus") && (e.keyCode == 13)) {
+            if ($('#text-message').val() != '') {
+                socket.emit('user-send-message', $('#text-message').val());
+                $('#text-message').val('');     
+            }
+        }
+    });
+});
+
+

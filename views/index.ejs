@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>CHAT REAL TIME</title>
+    <meta name="description" content="#">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap core CSS -->
+    <link href="css/lib/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <!-- Swipe core CSS -->
+    <link href="css/swipe.min.css" type="text/css" rel="stylesheet">
+    <!-- Favicon -->
+    <link href="image/favicon.png" type="image/png" rel="icon">
+</head>
+<body>
+    <main id="loginFrom">
+        <div class="layout">
+            <!-- Start of Sign In -->
+            <div class="main order-md-1">
+                <div class="start">
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="content">
+                                <h1>Tham gia chat</h1>
+                                <p>Đặt tên để vào chat nhé!</p>
+                                <form action="javascript:void(0)">
+                                    <p style="color: red;" id="error"></p>
+                                    <div class="form-group">
+                                        <input type="text" value="" id="input-name" class="form-control" placeholder="Nhập tên của bạn vào nhé!!!">
+                                    </div>
+                                    <button type="submit" class="btn button" id="btnRegister">Tham gia</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Sign In -->
+        </div> <!-- Layout -->
+    </main>
+    <main id="chatFrom">
+        <div class="layout">
+            <!-- Start of Sidebar -->
+            <div class="sidebar" id="sidebar">
+                <div class="container">
+                    <div class="col-md-12">
+                        <div class="tab-content">
+                            <!-- Start of Discussions -->
+                            <div id="discussions" class="tab-pane fade active show">					
+                                <div class="discussions">
+                                    <h1>Thành viên</h1>
+                                    <div class="list-group" id="chats"></div>
+                                </div>
+                            </div>
+                            <!-- End of Discussions -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Sidebar -->
+
+            <div class="main">
+                <div class="tab-content" id="nav-tabContent">
+                    <!-- Start of Babble -->
+                    <div class="babble tab-pane fade active show" id="list-chat" role="tabpanel" aria-labelledby="list-chat-list">
+                        <!-- Start of Chat -->
+                        <div class="chat" id="chat1">
+                            <div class="top">
+                                <div class="container">
+                                    <div class="col-md-12">
+                                        <div class="inside">
+                                            <a href="#"><img class="avatar-md" src="image/avatars/avatar-female-5.jpg" data-toggle="tooltip" data-placement="top" title="Keith" alt="avatar"></a>
+                                            <div class="status">
+                                                <i class="material-icons online">fiber_manual_record</i>
+                                            </div>
+                                            <div class="data">
+                                                <h5><a href="#" id="currentUser"></a></h5>
+                                                <span>Active now</span>
+                                            </div>
+                                        </div>
+                                        <div class="float-right">
+                                            <button id="" class="btn" style="position: relative; bottom: 40px;">
+                                                <i class="material-icons">clear</i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content" id="content">
+                                <div class="container">
+                                    <div class="col-md-12" id="listMessage">
+                                    </div>
+                                    <div class="" id="startMessage"></div>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <div class="col-md-12">
+                                    <div class="bottom">
+                                        <form class="position-relative w-100" action="javascript:void(0)">
+                                            <textarea class="form-control" id="text-message" placeholder="Start typing for reply..." rows="1"></textarea>
+                                            <button class="btn emoticons"><i class="material-icons">insert_emoticon</i></button>
+                                            <button type="submit" class="btn send" id="sendMessage"><i class="material-icons">send</i></button>
+                                        </form>
+                                        <!-- <label>
+                                            <input type="file">
+                                            <span class="btn attach d-sm-block d-none"><i class="material-icons">attach_file</i></span>
+                                        </label>  -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of Chat -->
+                    </div>
+                    <!-- End of Babble -->
+                </div>
+            </div>
+        </div> <!-- Layout -->
+    </main>
+    <!-- Bootstrap/Swipe core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="js/vendor/popper.min.js"></script>
+    <script src="js/swipe.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        function scrollToBottom(el) { el.scrollTop = el.scrollHeight; }
+        scrollToBottom(document.getElementById('content'));
+    </script>
+     <!-- <script src="/js/jquery.js"></script> -->
+    <script src="https://lamvantan-nodejs.herokuapp.com/socket.io/socket.io.js" ></script>
+    <script src="/handle.js" ></script>
+</body>
+</html>

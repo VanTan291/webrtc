@@ -29,8 +29,12 @@ app.use(express.static('public'));
 //   })
 // });
 
+// app.get('/', (req, res) => {
+//   res.render('home');
+// });
+
 app.get('/', (req, res) => {
-  res.render('home');
+  res.render('index');
 });
 
 
@@ -40,25 +44,22 @@ io.on('connection', socket => {
   //console.log(socket.adapter.rooms); //liet ke cac room co tren server ra socket.adapter.rooms
 
   socket.on("client-register", (data) => {
-    if (arrayUsers.indexOf(data) >= 0) {
-      //fail
+    var name = data.toUpperCase();
+    if (arrayUsers.indexOf(name) >= 0) {
       socket.emit('server-send-register-error', 'Tên đã tồn tại đặt tên khác đê bạn ơi...');
     } else {
-      arrayUsers.push(data + ' đã tham gia');
-      socket.username = data;
+      arrayUsers.push(name);
+      socket.username = name;
 
-      socket.emit('server-send-register-success', data);
+      socket.emit('server-send-register-success', name);
 
       //send data to all user
       io.sockets.emit('server-send-list-data', arrayUsers);
     }
-
   });
 
   socket.on("client-logout", () => {
-    arrayUsers.splice(
-      arrayUsers.indexOf(socket.username), 1
-    )
+    arrayUsers.splice(arrayUsers.indexOf(socket.username), 1)
 
     //socket.broadcast phat cho tất cả nhưng khong phát cho mình
     socket.broadcast.emit('server-send-list-data', arrayUsers);
@@ -69,7 +70,6 @@ io.on('connection', socket => {
   });
 
   socket.on('start-message', () => {
-    console.log(socket.username + ' soan');
     var name = socket.username;
     socket.broadcast.emit('start-message', name)
   });
