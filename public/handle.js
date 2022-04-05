@@ -36,7 +36,7 @@ socket.on('server-send-message', function(data) {
         +'<div class="text-main">'
             +'<div class="text-group">'
                 +'<div class="text">'
-                    +'<p>' + data.message + '</p>'
+                    +'<p style="color: black !important;">' + data.message + '</p>'
                 +'</div>'
             +'</div>'
         +'</div>'
