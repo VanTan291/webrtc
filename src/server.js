@@ -1,13 +1,14 @@
 
 const express = require('express');
+const path = require('path');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const { v4: uuidV4 } = require('uuid');
 
 app.set('view engine', 'ejs');
+// app.set('views', './src/resources/views');
 app.set('views', './views');
-
 app.use(express.static('public'));
 
 // app.get('/', (req, res) => {
