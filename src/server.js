@@ -6,10 +6,15 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const { v4: uuidV4 } = require('uuid');
 
+const route = require('./routes');
+
 app.set('view engine', 'ejs');
 // app.set('views', './src/resources/views');
 app.set('views', './views');
 app.use(express.static('public'));
+
+// Route init
+route(app);
 
 // app.get('/', (req, res) => {
 //   res.redirect(`/${uuidV4()}`)
@@ -34,9 +39,7 @@ app.use(express.static('public'));
 //   res.render('home');
 // });
 
-app.get('/', (req, res) => {
-  res.render('index');
-});
+
 
 
 var arrayUsers = [];
