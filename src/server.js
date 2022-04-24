@@ -1,5 +1,7 @@
 
 const express = require('express');
+const redis = require('redis');
+const fetch = require('node-fetch');
 const path = require('path');
 const app = express();
 const server = require('http').Server(app);
@@ -7,6 +9,7 @@ const io = require('socket.io')(server);
 const { v4: uuidV4 } = require('uuid');
 
 const route = require('./routes');
+const { use } = require('express/lib/router');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/resources/views'));
@@ -17,36 +20,71 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Route init
 route(app);
 
-// app.get('/', (req, res) => {
-//   res.redirect(`/${uuidV4()}`)
-// })
+const REDIS_PORT = 6379;
 
-// app.get('/:room', (req, res) => {
-//   res.render('room', { roomId: req.params.room })
-// })
+const client = redis.createClient(REDIS_PORT);
 
-// io.on('connection', socket => {
-//   socket.on('join-room', (roomId, userId) => {
-//     socket.join(roomId)
-//     socket.to(roomId).emit('user-connected', userId)
+client.on('connect', function (error) {
+  console.log('connect redis');
+});
 
-//     socket.on('disconnect', () => {
-//       socket.to(roomId).emit('user-disconnected', userId)
-//     })
-//   })
-// });
+client.on('error', function (error) {
+  console.log('error fail');
+});
+//set response
+function setResponse(username, repos) {
+  return `<h2>${username} has ${repos} Github</h2>`;
+}
 
-// app.get('/', (req, res) => {
-//   res.render('home');
-// });
+//make request to github for data
+async function getRepos(req, res, next) {
+  try {
+    console.log('Fetching data ....');
+    const { username } = req.params;
 
+    const response = await fetch(`https://api.github.com/users/${username}`);
 
+    const data = await response.json();
+    const repos = data.public_repos;
 
+    //set data to redis
+    client.setex(username, 3600, repos);
+
+    res.send(setResponse(username, repos));
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+}
+
+//cage middleware
+function cache(req, res, next) {
+  const {username} = req.params;
+
+  client.get(username, (err, data) => {
+    if (err) throw err;
+
+    if (data !== null) {
+      res.send(setResponse(username, data));
+    } else {
+      next();
+    }
+  })
+}
+
+app.get('/repos/:username', cache, getRepos);
 
 var arrayUsers = [];
 io.on('connection', socket => {
   console.log('co nguoi ket noi nhe: ', socket.id);
   //console.log(socket.adapter.rooms); //liet ke cac room co tren server ra socket.adapter.rooms
+
+  // const subscribe = redis.createClient();
+  // subscribe.subscribe('sendMessage');
+  // subscribe.on('message', (channel, message) => {
+  //   console.log('channel: ', channel);
+  //   console.log('data: ', message);
+  // });
 
   socket.on("client-register", (data) => {
     var name = data.toUpperCase();
@@ -68,10 +106,17 @@ io.on('connection', socket => {
 
     //socket.broadcast phat cho tất cả nhưng khong phát cho mình
     socket.broadcast.emit('server-send-list-data', arrayUsers);
+
+    //subscribe.quit();
   });
 
   socket.on('user-send-message', (data) => {
     io.sockets.emit('server-send-message', {name: socket.username, message:data});
+
+    if (data !== '') {
+      console.log('as: ', data);
+      //client.publish('sendMessage', JSON.stringify(data));
+    }
   });
 
   socket.on('start-message', () => {
@@ -90,6 +135,8 @@ io.on('connection', socket => {
 
     //socket.broadcast phat cho tất cả nhưng khong phát cho mình
     socket.broadcast.emit('server-send-list-data', arrayUsers);
+
+    subscribe.quit();
   });
 
   socket.on('create-room', (data) => {
