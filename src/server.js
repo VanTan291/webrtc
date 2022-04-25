@@ -11,10 +11,14 @@ const { v4: uuidV4 } = require('uuid');
 const route = require('./routes');
 const { use } = require('express/lib/router');
 
+const db = require('./config/db/connect');
+
+//connect db
+db.connectDB();
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/resources/views'));
-// app.set('views', './views');
-// app.use(express.static('public'));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Route init
