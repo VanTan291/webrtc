@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const upload = multer();
 
 //controllers
-const indexController = require('../app/controllers/IndexController');
+const UserController = require('../app/controllers/UserController');
 
 //router
-router.get('/', indexController.index);
-router.get('/:slug', indexController.show);
+router.post('/register', upload.none(), UserController.register);
+router.get('/:slug', UserController.show);
 
 module.exports = router;
