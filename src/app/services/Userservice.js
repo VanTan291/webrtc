@@ -1,11 +1,13 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
-var nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 class UserService {
     async createUser(params)
     {
         try {
+            console.log(params);
             const salt = await bcrypt.genSalt(10);
             let password = await bcrypt.hash(params.password, salt);
             
@@ -48,6 +50,23 @@ class UserService {
         } catch (error) {
             return false
         }
+    }
+
+    async login(params) {
+        const { email, password } = await params;
+        const user = await User.findOne({email}).lean();
+
+        if (!user) {
+            return false;
+        }
+
+        if (await bcrypt.compare(password, user.password)) {
+            const token = await jwt.sign({ user }, 'my_sercet_key', { expiresIn: '30s' });
+            //res.json({ token: token });
+            return { status: true, token: token };
+        } 
+
+        return {staus: 'error', error: 'sai email hoac password'};
     }
 }
 
