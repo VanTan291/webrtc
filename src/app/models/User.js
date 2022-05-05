@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const userShema = new mongoose.Schema({
   author: { type: Number, default: 1},
   name: { type: String, maxLength: 50 },
-  email: { type: String, maxLength: 50 },
+  email: { type: String, maxLength: 50, unique: true },
   password: { type: String, maxLength: 255 },
   date: { type: Date, default: Date.now() },
   createdAt: { type: Date, default: Date.now() },

@@ -5,7 +5,7 @@ class UserController {
     //[GET] /
     async register(req, res) {
         console.log(req.body);
-        return await UserService.createUser(req.body)
+        return await UserService.register(req.body)
             .then((data) => {
                 console.log(data);
                 return res.status(200).json({ data: data });
