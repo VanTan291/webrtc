@@ -1,8 +1,8 @@
 const express = require('express');
+require('express-group-routes');
 const router = express.Router();
 const multer = require('multer');
 const upload = multer();
-const jwt = require('jsonwebtoken')
 const validate = require('../app/validator/validate')
 
 //controllers
@@ -13,8 +13,11 @@ const Middleware = require('../app/middleware/auth');
 router.post('/register', upload.none(), validate.register, UserController.register);
 router.post('/login', upload.none(), UserController.login);
 
-
-router.get('/api/home', Middleware.authenticateToken, UserController.show);
-router.get('/api/test', UserController.test);
+//route group
+router.group('/api/', (router) => {
+    router.use(Middleware.authenticateToken);
+    router.get('/home', UserController.show);
+    router.get('/test', UserController.test);
+});
 
 module.exports = router;
