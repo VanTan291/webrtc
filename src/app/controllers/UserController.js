@@ -1,9 +1,11 @@
 const UserService = require('../services/Userservice');
 
-class UserController {
+class UserController
+{
 
     //[GET] /
-    async register(req, res) {
+    async register(req, res)
+    {
         console.log(req.body);
         return await UserService.register(req.body)
             .then((data) => {
@@ -14,16 +16,10 @@ class UserController {
                 console.log('error: ', error)
                 return res.status(403).json(error);
             });
-        //res.render('index');
-        //res.send('ac');
     }
 
-    //:slug
-    show(req, res) {
-        res.send('ac');
-    }
-
-    async login(req, res) {
+    async login(req, res)
+    {
         return await UserService.login(req.body)
             .then((data) => {
                 console.log(data);
@@ -33,6 +29,26 @@ class UserController {
                 console.log('error: ', error)
                 return res.status(403).json(error);
             });
+    }
+
+    async show(req, res)
+    {
+        let user = req.user;
+
+        return  await UserService.show(user)
+            .then((data) => {
+                return res.status(200).json({ result: data });
+            })
+            .catch((error) => {
+                console.log('error: ', error)
+                return res.status(403).json(error);
+            })
+    }
+
+    async test(req, res)
+    {
+        console.log(req.user);
+        res.send('sss');
     }
 }
 

@@ -17,11 +17,9 @@ module.exports = {
 	register: [
 		check('username', 'Truong Username khong duoc trong').not().isEmpty(),
 		check('email', 'Truong email khong duoc trong').not().isEmpty(),
-        check('email', 'Sai dia chi email').isEmpty().normalizeEmail().isEmail(),
+        check('email', 'Sai dia chi email').isEmail({ignore_max_length: true}),
         check('email').custom(async (email) => {
-            const existingUser =
-                await User.findOne({ email })
-                 
+            const existingUser = await User.findOne({ email })   
             if (existingUser) {
                 throw new Error('Email da ton tai')
             }

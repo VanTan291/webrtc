@@ -51,7 +51,8 @@ class UserService {
         }
     }
 
-    async login(params) {
+    async login(params) 
+    {
         const { email, password } = await params;
         const user = await User.findOne({email}).lean();
 
@@ -60,12 +61,17 @@ class UserService {
         }
 
         if (await bcrypt.compare(password, user.password)) {
-            const token = await jwt.sign({ user }, 'my_sercet_key', { expiresIn: '30s' });
-            //res.json({ token: token });
+            const token = await jwt.sign({ user }, 'my_sercet_key', { expiresIn: '24h' });
+
             return { status: true, token: token };
         } 
 
         return {staus: 'error', error: 'sai email hoac password'};
+    }
+
+    async show(params)
+    {
+        return params;
     }
 }
 
