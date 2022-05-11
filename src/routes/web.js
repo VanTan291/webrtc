@@ -7,6 +7,7 @@ const validate = require('../app/validator/validate')
 
 //controllers
 const UserController = require('../app/controllers/UserController');
+const PostController = require('../app/controllers/PostController');
 const Middleware = require('../app/middleware/auth');
 
 //router
@@ -17,7 +18,10 @@ router.post('/login', upload.none(), UserController.login);
 router.group('/api/', (router) => {
     router.use(Middleware.authenticateToken);
     router.get('/home', UserController.show);
-    router.get('/test', UserController.test);
+    router.group('/post/', (router) => {
+        router.get('/create', PostController.create);
+    });
+    
 });
 
 module.exports = router;
