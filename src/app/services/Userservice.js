@@ -20,7 +20,7 @@ class UserService {
                 updatedAt: Date.now()
             });
 
-            user.save();
+            let newUser = user.save();
 
             // let transporter = nodemailer.createTransport({
             //     service: 'gmail',
@@ -45,7 +45,7 @@ class UserService {
             //     }
             // });
 
-            return user;
+            return newUser;
         } catch (error) {
             return false
         }

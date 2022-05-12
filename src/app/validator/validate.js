@@ -19,14 +19,32 @@ module.exports = {
 		check('email', 'Truong email khong duoc trong').not().isEmpty(),
         check('email', 'Sai dia chi email').isEmail({ignore_max_length: true}),
         check('email').custom(async (email) => {
-            const existingUser = await User.findOne({ email })   
+            const existingUser = await User.findOne({ email });
             if (existingUser) {
-                throw new Error('Email da ton tai')
+                throw new Error('Email da ton tai');
             }
         }),
         check('date', 'Truong date khong duoc trong').not().isEmpty(),
         check('password', 'Truong password khong duoc trong').not().isEmpty(),
         check('password', 'Truong password qua ngan, it nhat 6 ky tu').isLength({ min:6 }),
 		checkErr,
+	],
+
+    login: [
+		check('email', 'Truong email khong duoc trong').not().isEmpty(),
+        check('password', 'Truong password khong duoc trong').not().isEmpty(),
+		checkErr,
+	],
+
+    post: [
+		check('content').custom((value, { req }) => {
+            console.log(req.body.content);
+            if (req.body.type == 2 && req.body.content == '') {
+                throw new Error('Truong content khong duoc trong');
+            } else {
+                return true;
+            }
+        }),
+        checkErr,
 	],
 }

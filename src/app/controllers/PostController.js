@@ -1,11 +1,23 @@
-const UserService = require('../services/PostService');
+const PostService = require('../services/PostService');
 
 class PostController
 {
     async create(req, res)
     {
-        console.log(req.user);
-        res.send('sss');
+        let inputs = [];
+        inputs['file'] = req.file;
+        inputs['user'] = req.user;
+        inputs['data'] = req.body;
+
+        console.log(req.file);
+        return await PostService.create(inputs)
+            .then((data) => {
+                return res.status(200).json({ data: data });
+            })
+            .catch((error) => {
+                console.log('error: ', error)
+                return res.status(403).json(error);
+            });
     }
 }
 
