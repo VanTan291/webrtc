@@ -22,8 +22,10 @@ class UserController
     {
         return await UserService.login(req.body)
             .then((data) => {
-                console.log(data);
-                return res.status(200).json({ token: data.token });
+                return res.status(200).json({ 
+                    token: data.token,
+                    status: 200
+                });
             })
             .catch((error) => {
                 console.log('error: ', error)
