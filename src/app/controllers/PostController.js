@@ -19,6 +19,21 @@ class PostController
                 return res.status(403).json(error);
             });
     }
+
+    async show(req, res)
+    {
+        console.log(req.user);
+        return await PostService.show(req)
+            .then((data) => {
+                return res.status(200).json({ data: data });
+            })
+            .catch((error) => {
+                console.log('error: ', error)
+                return res.status(403).json(error);
+            });
+
+        //return res.status(200).json('ss');
+    }
 }
 
 module.exports = new PostController;

@@ -20,6 +20,7 @@ router.group('/api/', (router) => {
     router.use(Middleware.authenticateToken);
     router.get('/home', UserController.show);
     router.group('/post/', (router) => {
+        router.get('', PostController.show);
         router.get('/create', upload.single('file'), validate.post, PostController.create);
     });
     

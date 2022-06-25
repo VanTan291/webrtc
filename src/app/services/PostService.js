@@ -29,6 +29,16 @@ class PostService {
             return false
         }
     }
+
+    async show(req)
+    {
+        try {
+            
+            return newPost;
+        } catch (error) {
+            return false
+        }
+    }
 }
 
 module.exports = new PostService;
