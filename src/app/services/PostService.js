@@ -33,8 +33,10 @@ class PostService {
     async show(req)
     {
         try {
+            const user = req.user;
+            const listPost = await Post.find({user_id: user._id}).lean();
             
-            return newPost;
+            return listPost;
         } catch (error) {
             return false
         }

@@ -25,7 +25,10 @@ class PostController
         console.log(req.user);
         return await PostService.show(req)
             .then((data) => {
-                return res.status(200).json({ data: data });
+                return res.status(200).json({ 
+                    data: data,
+                    status: 200
+                });
             })
             .catch((error) => {
                 console.log('error: ', error)
