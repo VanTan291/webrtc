@@ -3,11 +3,11 @@ const User = require('../models/User');
 
 let checkErr = (req, res, next) => {
     const errorFormatter = ({ msg, param}) => {
-        return `${param}: ${msg}`;
+        return `${msg}`;
     };
     const result = validationResult(req).formatWith(errorFormatter);
     if (!result.isEmpty()) {
-        return res.json({ errors: result.array() });
+        return res.json({ errors: result.mapped() });
     } else {
         next();
     }

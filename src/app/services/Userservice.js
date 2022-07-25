@@ -53,20 +53,27 @@ class UserService {
 
     async login(params) 
     {
-        const { email, password } = await params;
-        const user = await User.findOne({email}).lean();
-
-        if (!user) {
-            return false;
+        try {
+            const { email, password } = await params;
+            const user = await User.findOne({email}).lean();
+    
+            // if (!user) {
+            //     return false;
+            // }
+    
+            if (await bcrypt.compare(password, user.password)) {
+                const token = await jwt.sign({ user }, 'my_sercet_key', { expiresIn: '24h' });
+    
+                return { status: 200, token: token };
+            } 
+            
+        } catch (error) {
+            return {
+                staus: 403,
+                message: 'sai email hoac password'
+            };
         }
-
-        if (await bcrypt.compare(password, user.password)) {
-            const token = await jwt.sign({ user }, 'my_sercet_key', { expiresIn: '24h' });
-
-            return { status: true, token: token };
-        } 
-
-        return {staus: 'error', error: 'sai email hoac password'};
+       
     }
 
     async show(params)
