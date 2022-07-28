@@ -4,13 +4,13 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 
 class UserService {
-    async register(params)
+    register(params)
     {
-        try {
-            const salt = await bcrypt.genSalt(10);
+        return new Promise(async (resolve, reject) => {
+			const salt = await bcrypt.genSalt(10);
             let password = await bcrypt.hash(params.password, salt);
-            
-            const user = new User({
+
+            const user = await new User({
                 author: params.author,
                 name: params.username,
                 email: params.email,
@@ -20,65 +20,46 @@ class UserService {
                 updatedAt: Date.now()
             });
 
-            let newUser = user.save();
+            let newUser = await user.save();
 
-            // let transporter = nodemailer.createTransport({
-            //     service: 'gmail',
-            //     auth: {
-            //         user: 'dog2912000@gmail.com',
-            //         pass: '2912000tan'
-            //     }
-            // });
-                
-            // let mailOptions = {
-            //     from: 'dog2912000@gmail.com',
-            //     to: 'lamvantan03@gmail.com',
-            //     subject: 'Sending Email using Node.js',
-            //     text: 'That was easy!'
-            // };
-                
-            // transporter.sendMail(mailOptions, function(error, info){
-            //     if (error) {
-            //         console.log(error);
-            //     } else {
-            //         console.log('Email sent: ' + info.response);
-            //     }
-            // });
-
-            return newUser;
-        } catch (error) {
-            return false
-        }
+            if (newUser) {
+                return resolve({ 
+                    message: 'Tao tai khoan thanh cong',
+                    data: newUser
+                });
+            } else {
+                return reject({
+                    message: 'Tao tai khoan that bai',
+                });
+            }
+		})
     }
 
-    async login(params) 
+    login(params) 
     {
-        try {
-            const { email, password } = await params;
+        return new Promise(async (resolve, reject) => {
+			const { email, password } = await params;
             const user = await User.findOne({email}).lean();
-    
-            // if (!user) {
-            //     return false;
-            // }
-    
-            if (await bcrypt.compare(password, user.password)) {
+
+            if (user && await bcrypt.compare(password, user.password)) {
                 const token = await jwt.sign({ user }, 'my_sercet_key', { expiresIn: '24h' });
-    
-                return { status: 200, token: token };
-            } 
-            
-        } catch (error) {
-            return {
-                staus: 403,
-                message: 'sai email hoac password'
-            };
-        }
-       
+                return resolve({ status: true, token: token });
+            } else {
+                return reject({message: 'Sai email hoac password'});
+            }
+		})
     }
 
     async show(params)
     {
-        return params;
+        console.log(params)
+        return new Promise(async (resolve, reject) => {
+            if (params) {
+                return resolve({ status: true, params: params });
+            } else {
+                return reject({message: 'khong co data'});
+            }
+		})
     }
 }
 

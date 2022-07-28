@@ -9,33 +9,31 @@ class PostController
         inputs['user'] = req.user;
         inputs['data'] = req.body;
 
-        console.log(req.file);
         return await PostService.create(inputs)
             .then((data) => {
-                return res.status(200).json({ data: data });
+                return res.status(200).json({ code: 200, data: data });
             })
             .catch((error) => {
-                console.log('error: ', error)
-                return res.status(403).json(error);
+                return res.status(403).json({ code: 403, message: error.message });
+            })
+            .finally(() => {
+                console.log('done!');
             });
     }
 
     async show(req, res)
     {
-        console.log(req.user);
         return await PostService.show(req)
             .then((data) => {
-                return res.status(200).json({ 
-                    data: data,
-                    status: 200
-                });
+                return res.status(200).json({ code: 200, result: data });
             })
             .catch((error) => {
-                console.log('error: ', error)
-                return res.status(403).json(error);
-            });
-
-        //return res.status(200).json('ss');
+                console.log(error);
+                return res.status(403).json({ code: 403, message: error.message });
+            })
+            .finally(() => {
+                console.log('done!');
+            })
     }
 }
 
