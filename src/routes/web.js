@@ -18,7 +18,7 @@ router.post('/login', upload.none(), validate.login, UserController.login);
 //route group
 router.group('/api/', (router) => {
     router.use(Middleware.authenticateToken);
-    router.get('/home', UserController.show);
+    router.get('/check-auth', UserController.checkAuth);
     router.group('/post/', (router) => {
         router.get('', PostController.show);
         router.get('/create', upload.single('file'), validate.post, PostController.create);

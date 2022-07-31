@@ -50,9 +50,8 @@ class UserService {
 		})
     }
 
-    async show(params)
+    async checkAuth(params)
     {
-        console.log(params)
         return new Promise(async (resolve, reject) => {
             if (params) {
                 return resolve({ status: true, params: params });

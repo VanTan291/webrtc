@@ -30,11 +30,11 @@ class UserController
             })
     }
 
-    async show(req, res)
+    async checkAuth(req, res)
     {
         let user = req.user;
 
-        return await UserService.show(user)
+        return await UserService.checkAuth(user)
             .then((data) => {
                 return res.status(200).json({ result: data });
             })
