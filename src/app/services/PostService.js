@@ -9,7 +9,7 @@ class PostService {
         return new Promise(async (resolve, reject) => {
 			let file = await this.s3.saveFileS3(params.file, params.user._id);
             const post = await new Post({
-                user_id: params.user._id,
+                user: params.user._id,
                 content: params.data.content,
                 file_url: file.Location,
                 like: params.data.like,
@@ -35,12 +35,12 @@ class PostService {
 		})
     }
 
-    show(req)
+    async show(req)
     {
         return new Promise(async (resolve, reject) => {
 			const user = req.user;
-            const listPost = await Post.find({user_id: user._id}).sort({'date_create': -1}).lean();
-
+            const listPost = await Post.find({user: user._id}).populate('user', 'name').sort({'date_create': -1}).lean();
+console.log(listPost)
             if (listPost) {
                 return resolve({ data: listPost });
             } else {

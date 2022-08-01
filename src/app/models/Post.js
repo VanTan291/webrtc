@@ -1,7 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+;
 
 const postShema = new mongoose.Schema({
-  user_id: { type: String },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   content: { type: String, default: null },
   file_url: { type: String, default: null },
   like: { type: Number, default: 0 },
