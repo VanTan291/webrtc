@@ -5,7 +5,7 @@ class PostController
     async create(req, res)
     {
         let inputs = [];
-        inputs['file'] = req.file;
+        inputs['file'] = req.file ?? '';
         inputs['user'] = req.user;
         inputs['data'] = req.body;
 

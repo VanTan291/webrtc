@@ -21,7 +21,7 @@ router.group('/api/', (router) => {
     router.get('/check-auth', UserController.checkAuth);
     router.group('/post/', (router) => {
         router.get('', PostController.show);
-        router.get('/create', upload.single('file'), validate.post, PostController.create);
+        router.post('/create', upload.single('file'), validate.post, PostController.create);
     });
     
 });
