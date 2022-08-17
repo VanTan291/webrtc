@@ -26,13 +26,15 @@ class PostService {
             let newPost = await post.save();
 
             if (newPost) {
+                const listPost = await Post.find({user: params.user._id}).populate('user', 'name').sort({'date_create': -1}).lean();
+
                 return resolve({ 
-                    message: 'Tao bai post thanh cong',
-                    data: newPost
+                    message: 'Tạo bài viết thành công',
+                    data: listPost
                 });
             } else {
                 return reject({
-                    message: 'Tao bai post that bai',
+                    message: 'Tạo bài viết thất bại',
                 });
             }
 		})
@@ -48,6 +50,25 @@ class PostService {
                 return resolve({ data: listPost });
             } else {
                 return reject({ message: 'Khong co data' });
+            }
+		})
+    }
+
+    async delete(req)
+    {
+        return new Promise(async (resolve, reject) => {
+			const user = req.user;
+            const deletePost = await Post.deleteOne({ _id: req.body.id });
+            
+            if (deletePost) {
+                const listPost = await Post.find({user: user._id}).populate('user', 'name').sort({'date_create': -1}).lean();
+
+                return resolve({ 
+                    message: 'Xoá bài viết thành công',
+                    data: listPost
+                });
+            } else {
+                return reject({ message: 'Xoá thất bại' });
             }
 		})
     }

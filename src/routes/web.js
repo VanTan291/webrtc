@@ -22,6 +22,7 @@ router.group('/api/', (router) => {
     router.group('/post/', (router) => {
         router.get('', PostController.show);
         router.post('/create', upload.single('file'), validate.post, PostController.create);
+        router.post('/delete', upload.none(), PostController.delete);
     });
     
 });

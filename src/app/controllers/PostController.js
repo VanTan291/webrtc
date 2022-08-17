@@ -11,7 +11,7 @@ class PostController
 
         return await PostService.create(inputs)
             .then((data) => {
-                return res.status(200).json({ code: 200, data: data });
+                return res.status(200).json({ code: 200, result: data });
             })
             .catch((error) => {
                 return res.status(403).json({ code: 403, message: error.message });
@@ -24,6 +24,20 @@ class PostController
     async show(req, res)
     {
         return await PostService.show(req)
+            .then((data) => {
+                return res.status(200).json({ code: 200, result: data });
+            })
+            .catch((error) => {
+                console.log(error);
+                return res.status(403).json({ code: 403, message: error.message });
+            })
+            .finally(() => {
+                console.log('done!');
+            })
+    }
+
+    async delete(req, res) {
+        return await PostService.delete(req)
             .then((data) => {
                 return res.status(200).json({ code: 200, result: data });
             })
